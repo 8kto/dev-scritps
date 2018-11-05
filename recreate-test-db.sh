@@ -1,0 +1,1 @@
+../pipopr.local/html/scripts/recreate-test-db.sh

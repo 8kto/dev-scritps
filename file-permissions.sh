@@ -1,0 +1,1 @@
+../pipopr.local/html/scripts/file-permissions.sh
