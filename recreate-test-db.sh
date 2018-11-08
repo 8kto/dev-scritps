@@ -5,22 +5,47 @@
 # Script could be run both from the root of the project and within
 # scripts directory also.
 #
+# Script consume parameters set in app/config/parameters.yml
+# from within `pimcore_test.db` section.
+#
 # Author: Igor Ivlev <ivlev@kurzor.net>
+#
+# Usage:
+#       ./scripts/recreate-test-db.sh OPTIONS
+#
+# Options:
+#       --help|-h                 This help message
+#       --none-interactive|-n     [false] Yes to all questions
 #
 #==============================================================================
 
 BASEDIR=$(dirname $0)
 DUMP_PATH=${BASEDIR}/../var/dump/database-dump-latest.sql
 PARAMETERS_PATH=${BASEDIR}/../app/config/parameters.yml
+_NONINTERACTIVE=false
 
 # Include lib
 source ${BASEDIR}/lib.sh
 
+# Script options
+for arg in "$@" ; do
+    case ${arg} in
+        --none-interactive|-n)
+            _NONINTERACTIVE=true
+            shift
+        ;;
+        --help|-h)
+            show_help 19
+            exit 0
+        ;;
+    esac
+done
+
 # Check if vendor dir is exists on current path
-if [ ! -d './vendor' ]; then
+if [[ ! -d './vendor' ]]; then
     cd ../
 fi
-if [ ! -d './vendor' ]; then
+if [[ ! -d './vendor' ]]; then
     error 'Cannot find vendor dir'
     exit 1
 fi
@@ -48,30 +73,32 @@ fi
 
 # If any of params is empty
 for var in "${VARS[@]}" ; do
-	if [ -z "${var}" ] || [[ "${var}" = '~' ]] ; then
+	if [[ -z "${var}" ]] || [[ "${var}" = '~' ]] ; then
 	    error "Required param is not set"
 	    exit 1
 	fi
 done
 
 # Ask user
-while true ; do
-    read -p "Do you wish to recreate test database? (Y/N) " U_INPUT
+if [[ ${_NONINTERACTIVE} = false ]] ; then
+    while true ; do
+        read -p "Do you wish to recreate the test database (${DBNAME} will be DROPPED)? (Y/N) " U_INPUT
 
-    case ${U_INPUT} in
-        [Yy]*)
-            break
-         ;;
-        [Nn]*)
-            exit 0
-        ;;
-        *)
-            error "Please answer (y) or (n)."
-         ;;
-    esac
-done
+        case ${U_INPUT} in
+            [Yy]*)
+                break
+             ;;
+            [Nn]*)
+                exit 0
+            ;;
+            *)
+                error "Please answer (y) or (n)."
+             ;;
+        esac
+    done
+fi
 
-print "Recreate test database (${DBNAME})..."
+print "Recreate the test database (${DBNAME})..."
 echo "DROP DATABASE IF EXISTS ${DBNAME};" | mysql -u ${DBUSER} -p${DBPASS} -h ${HOST} -P${PORT}
 echo "CREATE DATABASE ${DBNAME} COLLATE utf8mb4_general_ci;" | mysql -u ${DBUSER} -p${DBPASS} -h ${HOST} -P${PORT}
 

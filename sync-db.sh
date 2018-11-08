@@ -7,45 +7,69 @@
 #
 # Author: Igor Ivlev <ivlev@kurzor.net>
 #
+# Usage:
+#       ./scripts/sync-db.sh OPTIONS
+#
+# Options:
+#       --help|-h                 This help message
+#       --none-interactive|-n     [false] Yes to all questions
+#
 #==============================================================================
 
 BASEDIR=$(dirname $0)
+_NONINTERACTIVE=false
 
 # Include lib
 source ${BASEDIR}/lib.sh
 
+# Script options
+for arg in "$@" ; do
+    case ${arg} in
+        --none-interactive|-n)
+            _NONINTERACTIVE=true
+            shift
+        ;;
+        --help|-h)
+            show_help 16
+            exit 0
+        ;;
+    esac
+done
+
 # Check if vendor dir is exists on current path
-if [ ! -d './vendor' ]; then
+if [[ ! -d './vendor' ]]; then
     cd ../
 fi
-if [ ! -d './vendor' ]; then
+if [[ ! -d './vendor' ]]; then
     error 'Cannot find vendor dir'
     exit 1
 fi
 
-if [ ! -f './var/dump/database-dump-latest.sql' ]; then
+if [[ ! -f './var/dump/database-dump-latest.sql' ]]; then
     error 'Cannot find dump'
     exit 1
 fi
 
 # Ask user
-while true ; do
-    read -p "Do you wish to sync dev database with the last actual dump? (Y/N) " U_INPUT
+if [[ ${_NONINTERACTIVE} = false ]] ; then
+    while true ; do
+        read -p "Do you wish to sync the dev database (${MYSQL_DATABASE}) with the last actual dump? (Y/N) " U_INPUT
 
-    case ${U_INPUT} in
-        [Yy]*)
-            break
-         ;;
-        [Nn]*)
-            exit 0
-        ;;
-        *)
-            error "Please answer (y) or (n)."
-         ;;
-    esac
-done
+        case ${U_INPUT} in
+            [Yy]*)
+                break
+             ;;
+            [Nn]*)
+                exit 0
+            ;;
+            *)
+                error "Please answer (y) or (n)."
+             ;;
+        esac
+    done
+fi
 
-print "Upload sql dump into dev database..."
+print "Upload sql dump into dev database (${MYSQL_DATABASE})..."
 mysql -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -h${MYSQL_HOST} ${MYSQL_DATABASE} < var/dump/database-dump-latest.sql
 print "Done"
 

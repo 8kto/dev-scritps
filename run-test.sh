@@ -77,10 +77,10 @@ done
 print 'Tests starts...'
 
 # Check if vendor dir is exists on current path
-if [ ! -d './vendor' ]; then
+if [[ ! -d './vendor' ]]; then
     cd ../
 fi
-if [ ! -d './vendor' ]; then error 'Cannot find vendor dir'; exit 1; fi
+if [[ ! -d './vendor' ]]; then error 'Cannot find vendor dir'; exit 1; fi
 
 if [[ ${SKIP_SYNTAX_CHECK} = false ]]; then
     print 'Syntax errors check...'

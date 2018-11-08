@@ -15,12 +15,14 @@
 #       --use-datestamp  [false]  Add datestamp into filename.
 #                                 If false, creates `database-dump-latest.sql`
 #       --output         [true]   Output directory
+#       --help|-h                 This help message
+#       --none-interactive|-n     [false] Yes to all questions
 #
 # Examples:
 #       Get actual database snapshot:
 #           ./scripts/dump-db.sh
 #       Dump & compress with timestamp:
-#           ./scripts/dump-db.sh --use-gzip --use-datestamp --output /tmp/
+#           ./scripts/dump-db.sh --use-gzip --use-datestamp --output /tmp
 #
 #==============================================================================
 
@@ -32,19 +34,10 @@ _RAW_SQL=true
 _USE_GZIP=false
 _USE_DATESTAMP=false
 _BACKUP_DIR=${CURDIR}/var/dump
+_NONINTERACTIVE=false
 
 # Include lib
 source ${BASEDIR}/lib.sh
-
-# Check if dump dir is exists on current path
-if [ ! -d ${_BACKUP_DIR} ]; then
-    cd ../
-fi
-
-if [ ! -d ${_BACKUP_DIR} ]; then
-    error 'Cannot find dump dir'
-    exit 1
-fi
 
 # Check if all the utils are installed
 _EXECUTABLES=( mysqldump gzip )
@@ -91,29 +84,45 @@ for arg in "$@" ; do
             _BACKUP_DIR=$2
             shift 2
         ;;
+        --none-interactive|-n)
+            _NONINTERACTIVE=true
+            shift
+        ;;
         --help|-h)
-            show_help 24
+            show_help 26
             exit 0
         ;;
     esac
 done
+
+# Check if dump dir is exists on current path
+if [[ ! -d ${_BACKUP_DIR} ]]; then
+    cd ../
+fi
+
+if [[ ! -d ${_BACKUP_DIR} ]]; then
+    error 'Cannot find dump dir'
+    exit 1
+fi
 
 # Ask user
-while true ; do
-    read -p "Do you wish to dump [dev] database? (Y/N) " U_INPUT
+if [[ ${_NONINTERACTIVE} = false ]] ; then
+    while true ; do
+        read -p "Do you wish to dump [dev] database into ${_BACKUP_DIR}? (Y/N) " U_INPUT
 
-    case ${U_INPUT} in
-        [Yy]*)
-            break
-         ;;
-        [Nn]*)
-            exit 0
-        ;;
-        *)
-            error "Please answer (y) or (n)."
-         ;;
-    esac
-done
+        case ${U_INPUT} in
+            [Yy]*)
+                break
+             ;;
+            [Nn]*)
+                exit 0
+            ;;
+            *)
+                error "Please answer (y) or (n)."
+             ;;
+        esac
+    done
+fi
 
 print 'Start dumping...'
 
@@ -161,6 +170,6 @@ if [[ ! -z ${_VALID} ]] ; then
     exit 1
 fi
 
-print 'Dump is done.'
+print "Dump is done (${filepath})."
 echo ${_RESULT}
 exit 0
