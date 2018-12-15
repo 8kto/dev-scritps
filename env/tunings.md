@@ -1,22 +1,20 @@
-# ~/.bashrc
-
-## Colored prompt for root user 
+#Colored prompt for root user 
+## ~/.bashrc
 ```
 export PS1="\[$(tput bold)\]\[\033[38;5;196m\]\u@\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]:\[$(tput sgr0)\]\[\033[38;5;129m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]\\$ \[$(tput sgr0)\]"
 ```
 
-# /etc/inputrc
-
-## Smart history
+# Smart history
+## /etc/inputrc
 ```
-## arrow up
+# arrow up
 "\e[A":history-search-backward
-## arrow down
+# arrow down
 "\e[B":history-search-forward
 ```
 
 # Git aliases
-# ~/.gitconfig
+## ~/.gitconfig
 https://githowto.com/ru/aliases
 ```
 [alias]
@@ -28,3 +26,25 @@ https://githowto.com/ru/aliases
   type = cat-file -t
   dump = cat-file -p
 ```
+
+# Set default editor for CLI (`vim` recommended)
+```sh
+sudo update-alternatives --config editor
+```
+
+# vim tunings
+```
+set ignorecase          " Do case insensitive matching
+set number		" Enable line numbers
+```
+
+# Mount ntfs partitions
+```
+apt install ntfs-config
+```
+
+# Install LAMP stack
+https://www.linode.com/docs/web-servers/lamp/install-lamp-stack-on-ubuntu-18-04/
+
+
+
