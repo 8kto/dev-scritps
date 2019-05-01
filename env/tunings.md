@@ -36,6 +36,18 @@ sudo update-alternatives --config editor
 ```
 set ignorecase          " Do case insensitive matching
 set number		" Enable line numbers
+
+# Set an extented view for VIM internal file manager
+let g:netrw_liststyle = 1
+
+# By default files will be opened in the same window as the netrw directory browser. 
+# To change this behaviour the netrw_browse_split option may be set. The options are as follows
+# 1 - open files in a new horizontal split
+# 2 - open files in a new vertical split
+# 3 - open files in a new tab
+# 4 - open in previous window
+let g:netrw_browse_split = 3
+
 ```
 
 # Mount ntfs partitions

@@ -13,7 +13,7 @@
 
 + Ctrl+W, Q to close one
 
-+ Ctrl+W, Ctrl+W to switch between windows
++ Ctrl+W, Ctrl+W to switch between windows/splits
 
 + Ctrl+W, J (xor K, H, L) to switch to adjacent window (intuitively up, down, left, right)
 
