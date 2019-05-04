@@ -82,3 +82,10 @@ mysqldump -u user -ppassword database table | gzip > backup-database.sql-$(date 
 # Сменить обои на XFCE
 xfdesktop --reload
 
+# Mount ntfs partitions
+apt install ntfs-config
+
+# Install LAMP stack
+https://www.linode.com/docs/web-servers/lamp/install-lamp-stack-on-ubuntu-18-04/
+
+
