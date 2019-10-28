@@ -21,10 +21,6 @@ build: setup				## Builds the docker image and tags it with a temp tag name (bas
 	$(DOCKER) tag ${DOCKER_IMAGE} ${DOCKER_IMAGE_TEST}
 
 test: setup					## Executes `yarn test` inside the docker container with the temp tag name.
-ifdef CI
-	$(DOCKER) run -it --rm --user root -v ${CWD}/coverage:/home/node/app/coverage ${DOCKER_OPTS} ${DOCKER_IMAGE} yarn test
-else
-	$(DOCKER) run -it --rm --user root -v ${CWD}/coverage:/home/node/app/coverage ${DOCKER_OPTS} ${DOCKER_IMAGE} yarn install --offline --production=false
 	$(DOCKER) run -it --rm --user root -v ${CWD}/coverage:/home/node/app/coverage ${DOCKER_OPTS} ${DOCKER_IMAGE} yarn test
 endif
 
@@ -39,40 +35,26 @@ lint: setup					## Executes `yarn lint` inside the docker container with the tem
 	# ------------------------------------------------------
 # DEV COMMANDS
 # ------------------------------------------------------
-dev:											## [DEV] Start development environment (without storybook)
-	$(COMPOSE) up --scale storybook=0 --scale nginx=0
+dev:                    ## [DEV] Start development environment (without storybook)
+	$(COMPOSE) up --scale nginx=0
 
-dev-all:									## [DEV] Start development environment (with storybook and nginx proxy)
-	$(COMPOSE) up
+console:				## [DEV] Attaching a console to the current environment
+	$(COMPOSE) exec project_name sh || ($(COMPOSE) run project_name bash)
 
-dev-with-proxy:						## [DEV] Start development environment (with nginx proxy)
-	$(COMPOSE) up --scale storybook=0
-
-storybook:								## [DEV] Start storybook
-	$(COMPOSE) up --scale nginx=0 --scale project_name=0
-
-console:									## [DEV] Attaching a console to the current environment
-	$(COMPOSE) exec project_name sh || ($(COMPOSE) run project_name sh)
-
-yarn:									## [DEV] Run `yarn` inside the dev container
+yarn:					## [DEV] Run `yarn` inside the dev container
 	$(COMPOSE) exec project_name yarn || ($(COMPOSE) run project_name yarn)
 
-down:										## [DEV] Stop docker containers
+down:					## [DEV] Stop docker containers
 	$(COMPOSE) down
 
-clean:										## [DEV] Stop docker containers and remove volumes
+clean:					## [DEV] Stop docker containers and remove volumes
 	$(COMPOSE) down -v
 
 forcefully-remove-containers:	## [DEV] Remove all project_name related containers
 	$(DOCKER) docker ps -a | grep 'project_name' | awk '{print $2}' | xargs $(DOCKER) rmi -f
 
-test-update: setup				## [DEV] Update test snapshots
+test-update: setup			## [DEV] Update test snapshots
 	$(DOCKER) run -it --rm ${DOCKER_OPTS} ${DOCKER_IMAGE} yarn update-test
-
-test-update-visual: setup	## [DEV] Update the visual tests
-	$(COMPOSE_TEST) up -d chrome
-	$(COMPOSE_TEST) run --rm test-container-update yarn update-visual || ($(COMPOSE_TEST) down && exit 1)
-	$(COMPOSE_TEST) down
 
 # ------------------------------------------------------
 # UTILS
