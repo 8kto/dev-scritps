@@ -1,7 +1,7 @@
 # VIM tunings
 Config file: `/etc/vim/vimrc` 
 
-```
+```vim
 set ignorecase      " Do case insensitive matching
 set number		    " Enable line numbers
 set splitbelow		" Focus gets to new hor split open | bottom
@@ -17,7 +17,7 @@ Set an extented view for VIM internal file manager
 + 2: Wide, which is files in columns
 + 3: Tree style
 
-```
+```vim
 let g:netrw_liststyle = 1
 ```
 
@@ -28,7 +28,7 @@ To change this behaviour the netrw_browse_split option may be set. The options a
 + 3: open files in a new tab
 + 4: open in previous window
 
-```
+```vim
 let g:netrw_browse_split = 2
 ```
 
