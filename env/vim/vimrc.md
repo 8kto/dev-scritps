@@ -48,3 +48,11 @@ augroup ProjectDrawer
   autocmd VimEnter * wincmd l       " set focus to right pane (instead of file explorer)
 augroup END
 ```
+Cons:
++ More noisy look of the screen every time you open `vim`, even when you don't need it
++ You have to hit a bit longer commands to save/quit
+
+Pros:
++ Useful file explorer which saves time and enables you to see/navigate through files on the same level with the opened one,
+without opening an additional tab/running `:bash`
++ Smarter screen's space distribution, especially for the wide screens 
