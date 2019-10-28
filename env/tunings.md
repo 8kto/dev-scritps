@@ -2,7 +2,7 @@
 #### Smart incremental history search
 The first two commands bind your up and down cursor keys to incrementally search your history. 
 The second two ensure that left and right continue to work correctly.
-```
+```shell script
 # ~/.inputrc or /etc/inputrc for all users
 
 # arrow up
@@ -18,14 +18,14 @@ export HISTFILESIZE=100000000
 
 
 #### Colored prompt for root 
-```
+```shell script
 # ~/.bashrc
 export PS1="\[$(tput bold)\]\[\033[38;5;196m\]\u@\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]:\[$(tput sgr0)\]\[\033[38;5;129m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]\\$ \[$(tput sgr0)\]"
 ```
 
 
 #### Current git branch in prompt + current base dir (instead of full path)
-```sh
+```shell script
 # Add git branch if it's present to PS1
 parse_git_branch() {
  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
@@ -54,7 +54,7 @@ Docs:
 + RU: http://xgu.ru/wiki/shopt
 + RU: https://habr.com/ru/post/452522/
 
-```sh
+```shell script
 # ~/.bashrc
 shopt -s cdspell    # fix typos in commands
 shopt -s autocd     # change disk wo `cd` typing
@@ -66,6 +66,6 @@ shopt -s no_empty_cmd_completion # No search in PATH for empty console by TAB+TA
 
 #### Set default editor for CLI
 `vim` recommended 😏
-```sh
+```shell script
 sudo update-alternatives --config editor
 ```
