@@ -25,6 +25,7 @@ alias gb='git branch '
 alias gc='git commit'
 alias gd='git diff'
 alias gp='git push'
+alias gh='git hist'
 alias go='git checkout ' 
 alias gk='gitk --all&'
 alias gx='gitx --all'
@@ -32,7 +33,7 @@ alias gx='gitx --all'
 alias got='git '
 alias get='git '
 
-# Enable autocompletion for the aliases above
+# Enable autocompletion for the custom git aliases above
 [ -f /usr/share/bash-completion/completions/git ] && . /usr/share/bash-completion/completions/git
 __git_complete ga _git_add
 __git_complete gc _git_commit
