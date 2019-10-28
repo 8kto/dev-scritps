@@ -4,20 +4,20 @@
 /**
  * Generate form type layout for Symfony entity
  *
- * @author Igor Ivlev igor@loftdigital.com
+ * @author Igor Okto <web@axisful.info>
  *
  * Usage:
  *   Get documentation:
- *     ./scripts/symfony-form-type-gen.php --help
+ *     ./symfony-form-type-gen.php --help
  *
  *   Get buildForm method for form type:
- *     ./scripts/symfony-form-type-gen.php --build-form-method --entity src/Entity/Proposal/ProposalMeetingRoom.php
+ *     ./symfony-form-type-gen.php --build-form-method --entity src/Entity/Some/SomeConcrete.php
  *
  *   Get AJAX payload for Postman calls:
- *     ./scripts/symfony-form-type-gen.php --print-json-payload --entity src/Entity/Proposal/ProposalMeetingRoom.php
+ *     ./symfony-form-type-gen.php --print-json-payload --entity src/Entity/Some/SomeConcrete.php
  *
  *   Get valid data method body for use in controller test:
- *     ./scripts/symfony-form-type-gen.php --print-test-valid-data-method --entity src/Entity/Proposal/ProposalMeetingRoom.php
+ *     ./symfony-form-type-gen.php --print-test-valid-data-method --entity src/Entity/Some/SomeConcrete.php
  */
 return new class
 {
