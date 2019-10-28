@@ -5,6 +5,41 @@
 export PS1="\[$(tput bold)\]\[\033[38;5;196m\]\u@\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]:\[$(tput sgr0)\]\[\033[38;5;129m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]\\$ \[$(tput sgr0)\]"
 ```
 
+#### Current git branch in prompt + current base dir (not full path)
+```sh
+# Add git branch if its present to PS1
+parse_git_branch() {
+ git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+if [ "$color_prompt" = yes ]; then
+ # Colored user prompt
+ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\$ '
+ # Git branch + short path
+ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u:\[\033[01;34m\]\W\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\$ '
+else
+ PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(parse_git_branch)\$ '
+fi
+unset color_prompt force_color_prompt
+```
+
+#### Misc enhancements to bash
+```sh
+# ~/.bashrc
+
+# https://habr.com/ru/post/452522/
+shopt -s cdspell    # fix typos
+shopt -s autocd     # change disk wo `cd` typing
+shopt -s checkjobs  # no exit when running tasks
+shopt -s histverify # when `!!` - show command first
+
+# Если включено, bash подставляет имена директорий из переменной во время автодополнения.
+# http://xgu.ru/wiki/shopt
+shopt -s direxpand 
+
+# No search in PATH for empty console by TAB+TAB
+shopt -s no_empty_cmd_completion
+```
+
 #### Smart history
 ```
 # /etc/inputrc

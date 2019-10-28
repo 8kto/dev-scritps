@@ -18,9 +18,15 @@
 + Ctrl+W, J (xor K, H, L) to switch to adjacent window (intuitively up, down, left, right)
 
 
-#Misc hotkeys
+# Misc hotkeys
 ```
 # Remove word
 dw
 ```
 
+# Quit, save
+```
+ZZ # Save file & quit
+ZQ # Exit without saving, same as :q!
+:xa # Save all & quit
+```
