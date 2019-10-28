@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# todo update or remove
-
-chown -R www-data: app/config bin composer.json var web/var
-chmod ug+x bin/*
+#==============================================================================
+# Set dir/files permissions to Apache user (save user's one for `var`)
+#==============================================================================
 
 HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1)
 

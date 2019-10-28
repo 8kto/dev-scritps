@@ -1,4 +1,4 @@
-https://github.com/vaniacer/bash_color
+# https://github.com/vaniacer/bash_color
 #----------------------------------------------------------------------+
 #Color picker, usage: printf ${BLD}${CUR}${RED}${BBLU}"Some text"${DEF}|
 #---------------------------+--------------------------------+---------+
