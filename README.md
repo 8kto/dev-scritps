@@ -6,15 +6,17 @@ commands and shortcuts I found useful for every-day routine.
 
 It is not a Definitive Guide or absolute truth of Configuration of All the Stuff, but snippets I apply for every Linux installation, 
 shortcuts which I use every day, scripts that I reimplemented a dozens of times (so they eventually became something common and settled here).
-I think that is why it is valuable: you don't have to learn all possible commands/options, but acquire something useful, and time-proven.
+I think that is why it is valuable: you don't have to learn all possible commands/options, but acquire something useful and time-proven.
 
 Any suggestions, PRs and comments are really welcome.         
 
+
+## Structure
 ```
-├── bash
-├── docker
-├── env
-├── git
-├── hotkeys
-└── php
+├── bash      # Common scripts and useful commands
+├── docker    # Some anemic Docker makefile template
+├── env       # Configurations for git, vim, Linux profile
+├── git       # Useful commands for git
+├── hotkeys   # Hotkeys for misc tools
+└── php       # Scripts I wrote for advanced dumping DB and some Symfony scaffolding 
 ```
