@@ -5,7 +5,7 @@
 # Script could be run both from the root of the project and within
 # scripts directory also.
 #
-# Author: Igor Ivlev <ivlev@kurzor.net>
+# Author: Igor Okto <web@axisful.info>
 #
 # Usage:
 #       ./scripts/sync-db.sh OPTIONS

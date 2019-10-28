@@ -4,7 +4,7 @@
 # Saves files into `var/dump/` directory.
 # WARNING: all `mysqldumps` calls should be configured with the actual params
 #
-# Author: Igor Ivlev <ivlev@ifhtagn@gmail.com>
+# Author Igor Okto <web@axisful.info>
 #
 # Usage:
 #       ./scripts/dump-db.sh OPTIONS
