@@ -1,14 +1,8 @@
+# Git hooks
+#### What are Git hooks?
+Git hooks are scripts that Git executes before or after events such as: commit, push, and receive. 
+Check [https://githooks.com](https://githooks.com) for more info.
+
+
 #### Add a ticket no in the commit message
-```shell script
-cp .git/hooks/prepare-commit-msg.sample .git/hooks/prepare-commit-msg
-```
-
-```shell script
-#!/bin/sh
-
-TICKET_NO=$(git rev-parse --abbrev-ref HEAD | egrep -i 'saefrnt\-[0-9]+' -o)
-
-if [ -n "$TICKET_NO" ]; then
-  sed -i "1i$TICKET_NO " $1
-fi
-```
+Check [/bash/git/hooks](https://github.com/8kto/dev-scripts/tree/master/bash/git/hooks) directory for the concrete file.
