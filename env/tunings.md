@@ -5,10 +5,10 @@ The second two ensure that left and right continue to work correctly.
 ```shell script
 # ~/.inputrc or /etc/inputrc for all users
 
-# arrow up
-"\e[A":history-search-backward
-# arrow down
-"\e[B":history-search-forward
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e[C": forward-char
+"\e[D": backward-char
 
 # ~/.bashrc
 # These simply set your history to be very large so that you have a huge bank of commands to search.
