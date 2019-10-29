@@ -1,4 +1,4 @@
-# VIM tunings
+# Vim tunings
 Config file: `/etc/vim/vimrc` 
 
 ```vim
@@ -11,7 +11,7 @@ set ignorecase      " Do case insensitive matching
 ```
 
 #### File manager
-Set an extented view for VIM internal file manager
+Set an extended view for `vim` internal file manager
 + 0: Thin, one file per line
 + 1: Long, one file per line with file size and time stamp
 + 2: Wide, which is files in columns
@@ -32,7 +32,7 @@ To change this behaviour the netrw_browse_split option may be set. The options a
 let g:netrw_browse_split = 2
 ```
 
-#### Advanced VIM look setup
+#### Advanced vim look setup
 Tune vim as a tab-manager with file explorer.
 ```vim
 " File manager tunings

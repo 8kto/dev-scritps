@@ -1,3 +1,5 @@
+# Vim: most used hotkeys
+
 #### Modes 101
 There are 3 modes in `vim`: 
 + *Command* or normal mode, when `vim` just opened
@@ -30,6 +32,7 @@ Tip: if you feel lost, hit double `Esc` to escape from any of depths back to nor
 + `p` Paste selected text
 + `u` Undo
 + `.` Redo
++ `Ctrl+p` Autocomplete word under cursor (based on the persisting text in file)
 
 
 #### How to quit vim
