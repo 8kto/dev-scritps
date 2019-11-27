@@ -7,7 +7,6 @@ set number          " Enable line numbers
 set splitbelow      " Focus gets to new hor split open | bottom
 set splitright      " Focus gets to new ver split open | right
 set showmatch       " Show matching brackets  
-set ignorecase      " Do case insensitive matching
 ```
 
 #### File manager
