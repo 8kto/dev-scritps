@@ -5,11 +5,6 @@
  * Prints output in STDOUT or dumps into file.
  * Validates dumps before output.
  *
- * `PhpMyAdmin\SqlParser` should be installed (composer.json):
- * "require-dev": {
- *    "phpmyadmin/sql-parser": "^4.3"
- * },
- *
  * @copyright Igor Okto <web@axisful.info>
  */
 
@@ -17,9 +12,8 @@ use PhpMyAdmin\SqlParser\Lexer;
 use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Utils\Error;
 
-// Composer autoload
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . './db.defs.php';
+require_once __DIR__ . '/../install/Database/db.defs.php';
 
 return new class
 {
@@ -46,10 +40,10 @@ return new class
    * Fallbacks from the env vars
    */
   private const ENV_VARS = [
-    'db-user' => 'TEST_WP_DB_USER',
-    'db-pass' => 'TEST_WP_DB_PASS',
-    'db-name' => 'TEST_SRC_DB_NAME',
-    'db-host' => 'TEST_WP_DB_HOST',
+    'db-user' => 'TEST_AC_WP_DB_USER',
+    'db-pass' => 'TEST_AC_WP_DB_PASS',
+    'db-name' => 'TEST_AC_SRC_DB_NAME',
+    'db-host' => 'TEST_AC_WP_DB_HOST',
   ];
 
   /**
@@ -101,11 +95,11 @@ return new class
     
     Options will fall back to the env variables
     Add these test vars into ~/.profile
-       TEST_WP_DB_HOST=localhost
-       TEST_WP_DB_USER=root
-       TEST_WP_DB_PASS=preved
-       TEST_TARGET_DB_NAME=test_db
-       TEST_SRC_DB_NAME=source_db
+       TEST_AC_WP_DB_HOST=localhost
+       TEST_AC_WP_DB_USER=root
+       TEST_AC_WP_DB_PASS=preved
+       TEST_AC_TARGET_DB_NAME=wordpress_test
+       TEST_AC_SRC_DB_NAME=alpinewp
     
     Options (if arg is omitted then env var used):
        --db-user            Database user
@@ -269,7 +263,11 @@ TXT;
       $code = $row['code'];
       $returns = $row['returns'];
 
-      $buffer[] = $this->templateFunctionCreateBlock($name, $params, $code, $returns);
+      if ($returns) {
+        $buffer[] = $this->templateFunctionCreateBlock($name, $params, $code, $returns);
+      } else {
+        $buffer[] = $this->templateProcedureCreateBlock($name, $params, $code);
+      }
     }
 
     return $buffer;
@@ -285,8 +283,8 @@ TXT;
     $buffer = [];
     $statement = $this->db->query(
       "SELECT TABLE_NAME name, VIEW_DEFINITION code
-        FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_SCHEMA='{$this->dbName}'"
+       FROM INFORMATION_SCHEMA.VIEWS
+       WHERE TABLE_SCHEMA='{$this->dbName}'"
     );
 
     if (!$statement) {
@@ -336,10 +334,9 @@ SQL;
     string $code,
     string $returns
   ): string {
-    // Fix internal MySQL formatting
-    $code = preg_replace('/\r/', '', $code);
-    $params = preg_replace('/\r/', '', $params);
-    $returns = preg_replace('/\r/', '', $returns);
+    $params = $this->process_mysql_output($params);
+    $code = $this->process_mysql_output($code);
+    $returns = $this->process_mysql_output($returns);
 
     $clearName = $this->getClearName($funcName);
     $desc = CALLABLE_DEFS[$clearName] ?? '';
@@ -360,6 +357,54 @@ CREATE FUNCTION `{$funcName}`(
   {$code}$$
 DELIMITER ;\n\n
 SQL;
+  }
+
+  /**
+   * @param string $funcName
+   * @param string $params
+   * @param string $code
+   *
+   * @return string
+   */
+  private function templateProcedureCreateBlock(
+    string $funcName,
+    string $params,
+    string $code
+  ): string {
+    // Fix internal MySQL formatting
+    $code = $this->process_mysql_output($code);
+    $params = $this->process_mysql_output($params);
+
+    $clearName = $this->getClearName($funcName);
+    $desc = CALLABLE_DEFS[$clearName] ?? '';
+    if (!$desc) {
+      $desc = '[No definition found for function]';
+    }
+    $desc = $this->commentStrings($desc);
+
+    return <<<SQL
+\n-- Procedure `{$funcName}`
+{$desc}
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `{$funcName}`$$
+CREATE PROCEDURE `{$funcName}`(
+  ${params}
+)
+  {$code}$$
+DELIMITER ;\n\n
+SQL;
+  }
+
+  /**
+   * Fix internal MySQL formatting
+   *
+   * @param string $output
+   *
+   * @return string
+   */
+  private function process_mysql_output(string $output): string
+  {
+    return preg_replace('/\r/', '', $output);
   }
 
   /**
@@ -449,7 +494,7 @@ SQL;
     $parser = new Parser($lexer->list);
     $errors = Error::get([$lexer, $parser]);
 
-    if (\count($errors) === 0) {
+    if (count($errors) === 0) {
       return null;
     }
 
@@ -585,10 +630,9 @@ SQL;
     $bottomLine = str_repeat($this->sectionDel, 87);
     $bottomLine = "-- {$bottomLine}";
 
-    return PHP_EOL . implode(PHP_EOL, [
-        $titleLine,
-        $bottomLine,
-      ]) . PHP_EOL;
+    return PHP_EOL
+           . implode(PHP_EOL, [$titleLine, $bottomLine,])
+           . PHP_EOL;
   }
 
   /**
