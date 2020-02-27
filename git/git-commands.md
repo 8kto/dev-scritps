@@ -56,6 +56,16 @@ git checkout origin/master src/DeletedFile.json
 Note the caret symbol (^), which gets the checkout prior to the one identified, 
 because at the moment of <SHA> commit the file is deleted, we need to look at the previous commit to get the deleted file's contents
 
+#### Display files in commit
+``` shell script
+git diff-tree --no-commit-id --name-only -r <SHA>
+```
+
+#### Show changes made by commit
+```
+git show <SHA>
+```
+
 #### Print commits amount
 ``` shell script
 git rev-list HEAD --count
