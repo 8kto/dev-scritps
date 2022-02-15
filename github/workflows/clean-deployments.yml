@@ -1,0 +1,30 @@
+name: Clean GitHub Pages deployments
+on:
+  schedule:
+    # Weekly, on Sundays at 00:00
+    - cron: "0 0 * * 6"
+  # Run workflow manually (without waiting for the cron to be called),
+  # through the GitHub Actions Workflow page directly
+  workflow_dispatch:
+
+env:
+  PULL_REQUEST_NUMBER: ${{ github.event.number }}
+  GIT_AUTHOR_EMAIL: ${{ github.actor }}@users.noreply.github.com
+  GIT_AUTHOR_NAME: ${{ github.actor }}
+  GIT_COMMITTER_EMAIL: ${{ github.actor }}@users.noreply.github.com
+  GIT_COMMITTER_NAME: ${{ github.actor }}
+
+jobs:
+  clean-storybook-deployments:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: styfle/cancel-workflow-action@0.8.0
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+      - name: Remove storybook
+        run: |
+          git pull --no-edit --quiet
+          git rm -rf storybook/*
+          git commit -m "Remove storybook artifacts" .
+          git push origin gh-pages
