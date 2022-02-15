@@ -5,6 +5,7 @@
 # @see https://blog.axisful.info/snippets/bash An article on my blog
 #==============================================================================
 
+
 # Processes
 #==============================================================================
 # Kill the processes by name / when pkill is not an option
@@ -16,6 +17,7 @@ ps -ocommand= -p $PID | awk -F/ '{print $NF}' | awk '{print $1}'
 # Top 5 processes by consumed memory
 ps -eo pmem,pcpu,vsize,pid,cmd | sort -k 1 -nr | head -5
 free -m
+
 
 # Files
 #==============================================================================
@@ -52,6 +54,7 @@ tar cfvj ~/tmp/archive-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2 . --exclude "cache"
 # gdrive must be installed. The hash is a directory's uniq id (could be found with gdrive)
 gdrive upload --parent 0B9ILkUWzQMQy3Q2hscGXaNX0zUXc ~/myfile.bz2
 
+
 # Media
 #==============================================================================
 # Convert to MP3
@@ -65,6 +68,10 @@ identify -format "%Wx%H\n" $(find . -size +900k -type f)
 
 # Set width=900px for any images with width > 900px
 mogrify -resize '900x99999>' -quality 90 ./*.jpeg
+
+# Normalize sound in videos
+ffmpeg-normalize *.mp4 -of ./normalized/
+
 
 # Misc
 #==============================================================================
